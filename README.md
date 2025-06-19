@@ -1,13 +1,11 @@
 ### Casting Agency - Udacity FullStack WebDevelopment Project
-#### [Link](https://project-capstone-fullstack-final.onrender.com/health).
-
-https://project-capstone-fullstack-final.onrender.com/health
-
 
 ## Project Motivation
 The Casting Agency is a project designed to assist producers and directors in managing movie and actor information. It allows users to add new movies, maintain actor data, and assign actors to specific movies.
 
 The project provides a set of APIs that support full CRUD (Create, Read, Update, Delete) operations for both movies and actors. It also implements role-based access control, where users have different permissions based on their assigned roles. Authentication is handled using JWT tokens through Auth0, ensuring secure access to the system.
+
+### https://project-capstone-fullstack-final.onrender.com/health
 
 ## Getting Started
 

@@ -52,11 +52,11 @@ source setup.sh
 ```bash
 echo $DATABASE_URL
 ```
-# postgresql://postgres@localhost:5432/postgres
+- postgresql://postgres@localhost:5432/postgres
 ```bash
 echo $EXCITED
 ```
-# true
+- true
 ```bash
 python3 app.py
 ```

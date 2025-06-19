@@ -1,4 +1,5 @@
 ### Casting Agency - Udacity FullStack WebDevelopment Project
+https://project-capstone-fullstack-final.onrender.com/health
 
 
 ## Project Motivation
@@ -42,10 +43,10 @@ This will install all of the required packages we selected within the `requireme
 chmod +x setup.sh
 source setup.sh
 ```
-# The setup.sh will run the following:
-# export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
-# export EXCITED="true"
-# Change the DATABASE_URL, as applicable to you.
+- The setup.sh will run the following:
+- export DATABASE_URL="postgresql://postgres@localhost:5432/postgres"
+- export EXCITED="true"
+- Change the DATABASE_URL, as applicable to you.
 ```bash
 echo $DATABASE_URL
 ```

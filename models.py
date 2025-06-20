@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import os
 from sqlalchemy import Column, String, Integer, create_engine, ForeignKey
 from flask_sqlalchemy import SQLAlchemy
@@ -21,13 +22,12 @@ def setup_db(app, database_path=database_path):
     db.app = app
     db.init_app(app)
 
-    '''
-db_drop_and_create_all()
+'''
+    db_drop_and_create_all()
     drops the database tables and starts fresh
     can be used to initialize a clean database
     !!NOTE you can change the database_filename variable to have multiple verisons of a database
 '''
-
 
 def db_drop_and_create_all():
     db.drop_all()
@@ -40,22 +40,15 @@ def db_drop_and_create_all():
 
     actor = Actor(name='actor1', age=25, gender='Female', movie_id=1)
     actor.insert()
-  
-"""
-Creating Movie Table
 
-"""
-class Movie(db.Model):
-    __tablename__ = 'movies'
 
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    release_date = Column(String)
-    actors = relationship('Actor', backref="movie", lazy=True)
+'''
+Extend the base model class to add common methods
+insert/update/delete records of the table
 
-    def __init__(self, title, release_date):
-        self.title = title
-        self.release_date = release_date
+'''
+class dbCrudOperations(db.Model):
+    __abstract__ = True
 
     def insert(self):
         db.session.add(self)
@@ -67,6 +60,23 @@ class Movie(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+  
+"""
+Creating Movie Table
+
+"""
+@dataclass
+class Movie(dbCrudOperations):
+    __tablename__ = 'movies'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    release_date = Column(String)
+    actors = relationship('Actor', backref="movie", lazy=True)
+
+    def __init__(self, title, release_date):
+        self.title = title
+        self.release_date = release_date
 
     #def __repr__(self):
     #    return f'<movies: id: {self.id.data}'
@@ -83,7 +93,8 @@ class Movie(db.Model):
 Creating Actor table
 
 """
-class Actor(db.Model):
+@dataclass
+class Actor(dbCrudOperations):
     __tablename__ = 'actors'
 
     id = Column(Integer, primary_key=True)
@@ -97,17 +108,6 @@ class Actor(db.Model):
         self.age = age
         self.gender = gender
         self.movie_id = movie_id
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
 
     def format(self):
         return {

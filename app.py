@@ -274,6 +274,7 @@ def create_app(test_config=None):
         except Exception as e:
             print("Update exception:", e)
             abort(500)  # Return a 500 error for any unexpected exceptions
+        
 
     '''
     PATCH /movies/<int:id>
@@ -305,27 +306,31 @@ def create_app(test_config=None):
         
         if movie is None:
             abort(404)  # Movie not found
+        
 
         body = request.get_json()
         new_title = body.get('title', None)
         new_release_date = body.get('release_date', None)
 
+        if new_title is None or new_release_date is None:
+            abort(422, "Title or release date are required.")  # Return a 422 error if required fields are missing
+
         # Update only if new values are provided
         if new_title is not None:
             movie.title = new_title
         if new_release_date is not None:
-            movie.release_date = new_release_date
+            movie.release_date = new_release_date        
 
         try:
             movie.update()  # Ensure this method is defined in your Movie model
             return jsonify({
                 'success': True,
                 'movie': movie.format() 
-            }), 200  # Return a 200 OK status
+            }), 200  # Return a 200 OK status     
+
         except Exception as e:
             print("Update exception:", e)
             abort(500)  # Return a 500 error for any unexpected exceptions
-    
     '''
     DELETE /actors/<int:id>
 
@@ -398,7 +403,7 @@ def create_app(test_config=None):
         return jsonify({
             "success": False,
             "error": 422,
-            "message":  "Unprocessable entity!!",
+            "message": getattr(error, 'description', "Data not found!!")
         }),422
 
     @app.errorhandler(404)
@@ -424,6 +429,14 @@ def create_app(test_config=None):
             "error": auth_error.status_code,
             "message": auth_error.error['description']
         }), auth_error.status_code
+    
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        return jsonify({
+            'success': False,
+            'error': 500,
+            'message': 'Internal server error. Please try again later.'
+        }), 500
     
     return app   
     
